@@ -252,6 +252,25 @@ describe('JsxLexer', () => {
         assert.equal(Lexer.extract(content)[0].defaultValue, 'Some Content')
         done()
       })
+
+      it('extracts defaultValue from tOptions', (done) => {
+        const Lexer = new JsxLexer()
+        const content =
+          '<Trans tOptions={{ defaultValue: "default" }}>Some Content</Trans>'
+        assert.equal(Lexer.extract(content)[0].defaultValue, 'default')
+        done()
+      })
+
+      it('extracts defaultValue_plural from tOptions', (done) => {
+        const Lexer = new JsxLexer()
+        const content =
+          '<Trans tOptions={{ defaultValue_plural: "default plural" }}>Some Content</Trans>'
+        assert.equal(
+          Lexer.extract(content)[0].defaultValue_plural,
+          'default plural'
+        )
+        done()
+      })
     })
   })
 })

@@ -1160,6 +1160,32 @@ describe('parser', () => {
       i18nextParser.end(fakeFile)
     })
 
+    it('uses the default values specified in the tOptions of <Trans> components', (done) => {
+      let result
+      const i18nextParser = new i18nTransform()
+      const fakeFile = new Vinyl({
+        contents: Buffer.from(
+          "<Trans count={1} tOptions={{ defaultValue: 'default', defaultValue_plural: 'default plural' }}>test {{count}}</Trans>"
+        ),
+        path: 'file.js',
+      })
+
+      i18nextParser.on('data', (file) => {
+        if (file.relative.endsWith(enLibraryPath)) {
+          result = JSON.parse(file.contents)
+        }
+      })
+      i18nextParser.once('end', () => {
+        assert.deepEqual(result, {
+          'test {{count}}': 'default',
+          'test {{count}}_plural': 'default plural',
+        })
+        done()
+      })
+
+      i18nextParser.end(fakeFile)
+    })
+
     it('generates plurals with key as value for languages with multiple plural forms', (done) => {
       let result
       const i18nextParser = new i18nTransform({

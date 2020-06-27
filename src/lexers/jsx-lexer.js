@@ -76,6 +76,19 @@ export default class JsxLexer extends JavascriptLexer {
         }
       }
 
+      const tOptionsAttribute = tagNode.attributes.properties.find(
+        (attr) => attr.name.text === 'tOptions'
+      )
+      const tOptionsProperties = tOptionsAttribute
+        ? tOptionsAttribute.initializer.expression.properties
+        : []
+      const defaultValueProperties = tOptionsProperties.filter((p) =>
+        p.name.text.startsWith('defaultValue')
+      )
+      for (const property of defaultValueProperties) {
+        entry[property.name.text] = property.initializer.text
+      }
+
       const namespace = getPropValue(tagNode, 'ns')
       if (namespace) {
         entry.namespace = namespace
