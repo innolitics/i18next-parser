@@ -13,8 +13,10 @@
                                                                                                                                                                                                                                                                                                                                                       */
 function dotPathToHash(entry) {var target = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   var path = entry.key;
+  var defaultValueProp = 'defaultValue';
   if (options.suffix || options.suffix === 0) {
     path += '_' + options.suffix;
+    defaultValueProp += '_' + options.suffix;
   }
 
   var separator = options.separator || '.';
@@ -40,6 +42,8 @@ function dotPathToHash(entry) {var target = arguments.length > 1 && arguments[1]
     newValue = key;
   } else if (skipDefaultValues) {
     newValue = '';
+  } else if (entry[defaultValueProp] || entry[defaultValueProp] === '') {
+    newValue = entry[defaultValueProp];
   } else if (entry.defaultValue) {
     newValue = entry.defaultValue;
   } else {

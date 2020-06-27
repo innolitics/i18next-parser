@@ -19,40 +19,62 @@ describe('JavascriptLexer', () => {
     done()
   })
 
-  it('extracts the defaultValue/context options', (done) => {
-    const Lexer = new JavascriptLexer()
-    const content = 'i18n.t("first", {defaultValue: "foo", context: \'bar\'})'
-    assert.deepEqual(Lexer.extract(content), [
-      { key: 'first', defaultValue: 'foo', context: 'bar' },
-    ])
-    done()
-  })
-
-  it('extracts the defaultValue/context on multiple lines', (done) => {
+  it('extracts the defaultValue/defaultValue_plural/context options', (done) => {
     const Lexer = new JavascriptLexer()
     const content =
-      'i18n.t("first", {\ndefaultValue: "foo",\n context: \'bar\'})'
+      'i18n.t("first", {defaultValue: "foo", defaultValue_plural: "foos", context: \'bar\'})'
     assert.deepEqual(Lexer.extract(content), [
-      { key: 'first', defaultValue: 'foo', context: 'bar' },
+      {
+        key: 'first',
+        defaultValue: 'foo',
+        defaultValue_plural: 'foos',
+        context: 'bar',
+      },
     ])
     done()
   })
 
-  it('extracts the defaultValue/context options with quotation marks', (done) => {
-    const Lexer = new JavascriptLexer()
-    const content = 'i18n.t("first", {context: "foo", "defaultValue": \'bla\'})'
-    assert.deepEqual(Lexer.extract(content), [
-      { key: 'first', defaultValue: 'bla', context: 'foo' },
-    ])
-    done()
-  })
-
-  it('extracts the defaultValue/context options with interpolated value', (done) => {
+  it('extracts the defaultValue/defaultValue_plural/context on multiple lines', (done) => {
     const Lexer = new JavascriptLexer()
     const content =
-      'i18n.t("first", {context: "foo", "defaultValue": \'{{var}} bla\'})'
+      'i18n.t("first", {\ndefaultValue: "foo",\n defaultValue_plural: "foos",\n context: \'bar\'})'
     assert.deepEqual(Lexer.extract(content), [
-      { key: 'first', defaultValue: '{{var}} bla', context: 'foo' },
+      {
+        key: 'first',
+        defaultValue: 'foo',
+        defaultValue_plural: 'foos',
+        context: 'bar',
+      },
+    ])
+    done()
+  })
+
+  it('extracts the defaultValue/defaultValue_plural/context options with quotation marks', (done) => {
+    const Lexer = new JavascriptLexer()
+    const content =
+      'i18n.t("first", {context: "foo", "defaultValue": \'bla\', "defaultValue_plural": \'blas\'})'
+    assert.deepEqual(Lexer.extract(content), [
+      {
+        key: 'first',
+        defaultValue: 'bla',
+        defaultValue_plural: 'blas',
+        context: 'foo',
+      },
+    ])
+    done()
+  })
+
+  it('extracts the defaultValue/defaultValue_plural/context options with interpolated value', (done) => {
+    const Lexer = new JavascriptLexer()
+    const content =
+      'i18n.t("first", {context: "foo", "defaultValue": \'{{var}} bla\', "defaultValue_plural": \'{{var}} blas\'})'
+    assert.deepEqual(Lexer.extract(content), [
+      {
+        key: 'first',
+        defaultValue: '{{var}} bla',
+        defaultValue_plural: '{{var}} blas',
+        context: 'foo',
+      },
     ])
     done()
   })

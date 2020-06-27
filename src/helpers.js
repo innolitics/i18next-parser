@@ -13,8 +13,10 @@
  */
 function dotPathToHash(entry, target = {}, options = {}) {
   let path = entry.key
+  let defaultValueProp = 'defaultValue'
   if (options.suffix || options.suffix === 0) {
     path += `_${options.suffix}`
+    defaultValueProp += `_${options.suffix}`
   }
 
   const separator = options.separator || '.'
@@ -40,6 +42,8 @@ function dotPathToHash(entry, target = {}, options = {}) {
     newValue = key
   } else if (skipDefaultValues) {
     newValue = ''
+  } else if (entry[defaultValueProp] || entry[defaultValueProp] === '') {
+    newValue = entry[defaultValueProp]
   } else if (entry.defaultValue) {
     newValue = entry.defaultValue
   } else {
